@@ -37,23 +37,21 @@ const updateLibrerias = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    // Si `req.body.comics` existe y contiene cómics, actualiza el campo de cómics
+    // Si `req.body.comics` existe , con addtoSet evitamos fuplicados
     if (req.body.comics) {
-      const oldLibreria = await Libreria.findById(id);
-      req.body.comics = [...oldLibreria.comics, ...req.body.comics];
+      const libreriaUpdated = await Libreria.findByIdAndUpdate(
+        id,
+        { $addToSet: { comics: { $each: req.body.comics } } }, // Evita duplicados
+        { new: true }
+      );
+      return res.status(200).json(libreriaUpdated);
     }
-
-    // Actualiza la librería con los datos proporcionados en `req.body`
-    const libreriaUpdated = await Libreria.findByIdAndUpdate(id, req.body, {
-      new: true, // Retorna la librería actualizada
-    });
-
-    return res.status(200).json(libreriaUpdated);
+    const libreriaUpdated = await Libreria.findByIdAndUpdate(id, req.body, { new: true, });
+    return res.status(200), json(libreriaUpdated);
   } catch (error) {
-    return res.status(400).json("No se ha actualizado ningúna libreria");
+    return res.status(400).json("No se ha actualizado ninguna librería");
   }
-}
-
+};
 const deleteLibrerias = async (req, res, next) => {
   try {
     const { id } = req.params;

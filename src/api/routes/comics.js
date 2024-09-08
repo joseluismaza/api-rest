@@ -1,9 +1,6 @@
 const comicsRouter = require("express").Router();
 const { getComicById, getComicByCategory, getComics, updateComics, deleteComics, postComics } = require("../controllers/comics");
 
-
-
-
 comicsRouter.get("/categoria/:categoria", getComicByCategory);
 comicsRouter.get("/:id", getComicById);
 comicsRouter.get("/", getComics);
