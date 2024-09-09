@@ -32,6 +32,17 @@ const getComicByCategory = async (req, res, next) => {
   }
 }
 
+const getComicsByPrice = async (req, res, next) => {
+  try {
+    const { precio } = req.params;
+    const comics = await Comic.find({ precio: { $lte: precio } });
+    return res.status(200).json(comics);
+  } catch (error) {
+    return res.status(400).json("No hay ningún cómic con ese precio")
+
+  }
+}
+
 const postComics = async (req, res, next) => {
   try {
     const newComic = new Comic(req.body);
@@ -74,6 +85,7 @@ module.exports = {
   getComics,
   getComicByCategory,
   getComicById,
+  getComicsByPrice,
   postComics,
   updateComics,
   deleteComics
